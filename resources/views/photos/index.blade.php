@@ -36,7 +36,7 @@
     </p>
 
     <p class="text-3xl font-bold mt-1">
-        {{ number_format($photos->total()) }}
+        {{ number_format($photos->count()) }}
     </p>
 
 </div>
@@ -93,19 +93,6 @@
             Photos collected from the Chrome extractor
             will appear here.
         </p>
-
-    </div>
-
-@endif
-
-
-{{-- Pagination --}}
-
-@if($photos->hasPages())
-
-    <div class="mt-6">
-
-        {{ $photos->links() }}
 
     </div>
 

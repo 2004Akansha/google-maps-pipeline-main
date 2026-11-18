@@ -10,7 +10,7 @@ class PhotoController extends Controller
     {
         $photos = $business->photos()
             ->latest()
-            ->paginate(24);
+            ->get();
 
         return view('photos.index', compact(
             'business',

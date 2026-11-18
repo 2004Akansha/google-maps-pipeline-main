@@ -10,7 +10,7 @@ class ReviewController extends Controller
     {
         $reviews = $business->reviews()
             ->latest('review_date')
-            ->paginate(10);
+            ->get();
 
         return view('reviews.index', compact(
             'business',

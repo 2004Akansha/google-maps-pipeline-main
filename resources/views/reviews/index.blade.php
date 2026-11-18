@@ -171,14 +171,4 @@
 </div>
 
 
-{{-- Pagination --}}
-
-@if($reviews->hasPages())
-
-    <div class="mt-6">
-        {{ $reviews->links() }}
-    </div>
-
-@endif
-
 @endsection
