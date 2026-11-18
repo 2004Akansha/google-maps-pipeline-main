@@ -7,6 +7,10 @@
     <title>{{ $title ?? 'Google Maps Pipeline' }}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+    rel="stylesheet"
+    href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css"
+>
 </head>
 
 <body class="bg-gray-100 text-gray-900">
@@ -39,6 +43,15 @@
 
         @yield('content')
     </main>
+
+   {{-- jQuery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    {{-- DataTables --}}
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+
+    {{-- Page-specific scripts --}}
+    @stack('scripts')
 
 </body>
 </html>
