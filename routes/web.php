@@ -6,6 +6,7 @@ use App\Http\Controllers\SourceController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\BusinessZipController;
 
 Route::get('/', function () {
     return redirect()->route('sources.index');
@@ -45,4 +46,7 @@ Route::get('/extraction-jobs/{extractionJob}',
     [ExtractionJobController::class, 'show']
 )->name('extraction-jobs.show');
 
-
+Route::get(
+    '/businesses/{business}/download-zip',
+    [BusinessZipController::class, 'download']
+)->name('businesses.download-zip');

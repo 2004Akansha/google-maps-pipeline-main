@@ -232,16 +232,29 @@
 
 
                                 {{-- Action --}}
-                                <td class="px-6 py-4 text-right">
+<td class="px-6 py-4">
 
-                                    <a
-                                        href="{{ route('businesses.show', $business) }}"
-                                        class="text-sm font-medium text-blue-600 hover:text-blue-800"
-                                    >
-                                        View
-                                    </a>
+    <div class="flex items-center justify-end gap-3">
 
-                                </td>
+        {{-- View Button --}}
+        <a
+            href="{{ route('businesses.show', $business) }}"
+            class="text-sm font-medium text-blue-600 hover:text-blue-800"
+        >
+            View
+        </a>
+
+        {{-- Download ZIP Button --}}
+        <a
+            href="{{ route('businesses.download-zip', $business) }}"
+            class="inline-flex items-center rounded-lg bg-green-600 px-3 py-2 text-xs font-medium text-white hover:bg-green-700"
+        >
+            Download ZIP
+        </a>
+
+    </div>
+
+</td>
 
                             </tr>
 
@@ -255,13 +268,6 @@
 
         </div>
 
-
-        {{-- Pagination --}}
-        <div class="mt-6">
-
-            {{ $businesses->links() }}
-
-        </div>
 
     @else
 

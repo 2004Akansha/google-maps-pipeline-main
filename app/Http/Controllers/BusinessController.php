@@ -34,8 +34,7 @@ class BusinessController extends Controller
 
         $businesses = $query
             ->latest()
-            ->paginate(10)
-            ->withQueryString();
+            ->get();
 
         $sources = Source::orderBy('name')->get();
 
