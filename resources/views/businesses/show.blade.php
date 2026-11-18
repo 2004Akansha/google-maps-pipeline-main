@@ -519,10 +519,10 @@
     </div>
 
 
-    
 {{-- Reviews Section --}}
 <div class="mt-8">
 
+    {{-- Section Header --}}
     <div class="mb-5 flex items-center justify-between">
 
         <div>
@@ -544,94 +544,125 @@
 
     </div>
 
+    {{-- Reviews Table --}}
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
-    <div class="space-y-4">
+        <div class="overflow-x-auto">
 
-        @forelse($latestReviews as $review)
+            <table class="min-w-full divide-y divide-gray-200">
 
-            <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                {{-- Table Header --}}
+                <thead class="bg-gray-50">
 
-                {{-- Reviewer and Rating --}}
-                <div class="flex items-start justify-between gap-4">
+                    <tr>
 
-                    <div>
-                        <h3 class="font-semibold text-gray-900">
-                            {{ $review->author ?? 'Anonymous' }}
-                        </h3>
+                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Reviewer
+                        </th>
 
-                        @if($review->review_date)
-                            <p class="mt-1 text-sm text-gray-500">
-                                {{ $review->review_date->format('d M Y') }}
-                            </p>
-                        @endif
-                    </div>
+                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Rating
+                        </th>
 
-                    @if($review->rating !== null)
-                        <div class="text-sm font-medium text-gray-700 whitespace-nowrap">
+                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Date
+                        </th>
 
-                            <span class="text-yellow-500">
-                                {{ $review->rating }} ★
-                            </span>
+                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Review
+                        </th>
 
-                            <span class="text-gray-400">
-                                / 5
-                            </span>
-
-                        </div>
-                    @endif
-
-                </div>
-
-
-                {{-- Review Text --}}
-                @if($review->review_text)
-
-                    <p class="mt-4 text-sm leading-7 text-gray-700">
-                        {{ $review->review_text }}
-                    </p>
-
-                @endif
-
-
-                {{-- Owner Response --}}
-                @if($review->owner_response)
-
-                    <div class="mt-5 rounded-lg bg-gray-50 border-l-4 border-blue-400 p-4">
-
-                        <p class="text-sm font-semibold text-gray-800">
+                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                             Owner Response
-                        </p>
+                        </th>
 
-                        <p class="mt-2 text-sm leading-6 text-gray-600">
-                            {{ $review->owner_response }}
-                        </p>
+                    </tr>
 
-                    </div>
+                </thead>
 
-                @endif
+                {{-- Table Body --}}
+                <tbody class="divide-y divide-gray-200 bg-white">
 
-            </div>
+                    @forelse($latestReviews as $review)
 
-        @empty
+                        <tr class="hover:bg-gray-50">
 
-            <div class="rounded-xl border border-gray-200 bg-white p-8 text-center">
+                            {{-- Reviewer --}}
+                            <td class="px-5 py-4 text-sm font-medium text-gray-900">
+                                {{ $review->author ?? 'Anonymous' }}
+                            </td>
 
-                <h3 class="font-semibold text-gray-800">
-                    No Reviews Available
-                </h3>
+                            {{-- Rating --}}
+                            <td class="whitespace-nowrap px-5 py-4 text-sm">
 
-                <p class="mt-2 text-sm text-gray-500">
-                    Reviews collected from the extractor will appear here.
-                </p>
+                                @if($review->rating !== null)
 
-            </div>
+                                    <span class="font-medium text-yellow-600">
+                                        {{ $review->rating }} ★
+                                    </span>
 
-        @endforelse
+                                @else
+
+                                    <span class="text-gray-400">—</span>
+
+                                @endif
+
+                            </td>
+
+                            {{-- Review Date --}}
+                            <td class="whitespace-nowrap px-5 py-4 text-sm text-gray-600">
+
+                                @if($review->review_date)
+                                    {{ $review->review_date->format('d M Y') }}
+                                @else
+                                    —
+                                @endif
+
+                            </td>
+
+                            {{-- Review Text --}}
+                            <td class="min-w-64 max-w-md px-5 py-4 text-sm leading-6 text-gray-700">
+                                <div class="whitespace-pre-line break-words">
+                                    {{ $review->review_text ?? 'No review text' }}
+                                </div>
+                            </td>
+
+                            {{-- Owner Response --}}
+                            <td class="min-w-64 max-w-md px-5 py-4 text-sm leading-6 text-gray-600">
+                                <div class="whitespace-pre-line break-words">
+                                    {{ $review->owner_response ?? 'No response' }}
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+                            <td colspan="5" class="px-5 py-10 text-center">
+
+                                <h3 class="font-semibold text-gray-800">
+                                    No Reviews Available
+                                </h3>
+
+                                <p class="mt-2 text-sm text-gray-500">
+                                    Reviews collected from the extractor will appear here.
+                                </p>
+
+                            </td>
+                        </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
 </div>
-
 
 {{-- Photos Section --}}
 <div class="mt-10">
@@ -660,7 +691,7 @@
 
     @if($latestPhotos->count())
 
-        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
 
             @foreach($latestPhotos as $photo)
 
@@ -671,7 +702,7 @@
                     class="group overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
                 >
 
-                    <div class="aspect-square overflow-hidden bg-gray-100">
+                    <div class="h-28 overflow-hidden bg-gray-100 sm:h-32">
 
                         <img
                             src="{{ $photo->photo_url }}"
