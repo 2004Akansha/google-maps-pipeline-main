@@ -45,15 +45,35 @@ class BusinessController extends Controller
     }
 
 
-    public function show(Business $business)
+   
+public function show(Business $business)
 {
+    // Load business source
     $business->load('source');
 
+    // Count all reviews and photos
     $business->loadCount([
         'reviews',
         'photos',
     ]);
 
-    return view('businesses.show', compact('business'));
+    // Get latest 5 reviews
+    $latestReviews = $business->reviews()
+        ->latest('review_date')
+        ->take(5)
+        ->get();
+
+    // Get latest 8 photos
+    $latestPhotos = $business->photos()
+        ->latest()
+        ->take(8)
+        ->get();
+
+    return view('businesses.show', compact(
+        'business',
+        'latestReviews',
+        'latestPhotos'
+    ));
 }
+
 }

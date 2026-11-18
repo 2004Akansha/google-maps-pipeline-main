@@ -519,76 +519,200 @@
     </div>
 
 
-    {{-- Data Navigation --}}
-    <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+    
+{{-- Reviews Section --}}
+<div class="mt-8">
 
-        {{-- Reviews --}}
+    <div class="mb-5 flex items-center justify-between">
+
+        <div>
+            <h2 class="text-xl font-bold text-gray-900">
+                Customer Reviews
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-500">
+                Latest customer reviews and owner responses
+            </p>
+        </div>
+
         <a
             href="{{ route('businesses.reviews', $business) }}"
-            class="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:shadow-md"
+            class="text-sm font-medium text-blue-600 hover:text-blue-800"
         >
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <h2 class="text-lg font-semibold text-gray-900">
-                        Reviews
-                    </h2>
-
-                    <p class="mt-1 text-sm text-gray-500">
-                        View all collected customer reviews and owner responses.
-                    </p>
-
-                </div>
-
-                <span class="text-2xl font-bold text-gray-900">
-                    {{ $business->reviews_count }}
-                </span>
-
-            </div>
-
-            <div class="mt-4 text-sm font-medium text-blue-600 group-hover:text-blue-800">
-                View Reviews →
-            </div>
-
-        </a>
-
-
-        {{-- Photos --}}
-        <a
-            href="{{ route('businesses.photos', $business) }}"
-            class="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:shadow-md"
-        >
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <h2 class="text-lg font-semibold text-gray-900">
-                        Photos
-                    </h2>
-
-                    <p class="mt-1 text-sm text-gray-500">
-                        View photos collected from this business.
-                    </p>
-
-                </div>
-
-                <span class="text-2xl font-bold text-gray-900">
-                    {{ $business->photos_count }}
-                </span>
-
-            </div>
-
-            <div class="mt-4 text-sm font-medium text-blue-600 group-hover:text-blue-800">
-                View Photos →
-            </div>
-
+            View All Reviews →
         </a>
 
     </div>
 
+
+    <div class="space-y-4">
+
+        @forelse($latestReviews as $review)
+
+            <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+
+                {{-- Reviewer and Rating --}}
+                <div class="flex items-start justify-between gap-4">
+
+                    <div>
+                        <h3 class="font-semibold text-gray-900">
+                            {{ $review->author ?? 'Anonymous' }}
+                        </h3>
+
+                        @if($review->review_date)
+                            <p class="mt-1 text-sm text-gray-500">
+                                {{ $review->review_date->format('d M Y') }}
+                            </p>
+                        @endif
+                    </div>
+
+                    @if($review->rating !== null)
+                        <div class="text-sm font-medium text-gray-700 whitespace-nowrap">
+
+                            <span class="text-yellow-500">
+                                {{ $review->rating }} ★
+                            </span>
+
+                            <span class="text-gray-400">
+                                / 5
+                            </span>
+
+                        </div>
+                    @endif
+
+                </div>
+
+
+                {{-- Review Text --}}
+                @if($review->review_text)
+
+                    <p class="mt-4 text-sm leading-7 text-gray-700">
+                        {{ $review->review_text }}
+                    </p>
+
+                @endif
+
+
+                {{-- Owner Response --}}
+                @if($review->owner_response)
+
+                    <div class="mt-5 rounded-lg bg-gray-50 border-l-4 border-blue-400 p-4">
+
+                        <p class="text-sm font-semibold text-gray-800">
+                            Owner Response
+                        </p>
+
+                        <p class="mt-2 text-sm leading-6 text-gray-600">
+                            {{ $review->owner_response }}
+                        </p>
+
+                    </div>
+
+                @endif
+
+            </div>
+
+        @empty
+
+            <div class="rounded-xl border border-gray-200 bg-white p-8 text-center">
+
+                <h3 class="font-semibold text-gray-800">
+                    No Reviews Available
+                </h3>
+
+                <p class="mt-2 text-sm text-gray-500">
+                    Reviews collected from the extractor will appear here.
+                </p>
+
+            </div>
+
+        @endforelse
+
+    </div>
+
+</div>
+
+
+{{-- Photos Section --}}
+<div class="mt-10">
+
+    <div class="mb-5 flex items-center justify-between">
+
+        <div>
+            <h2 class="text-xl font-bold text-gray-900">
+                Business Photos
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-500">
+                Photos collected from Google Maps
+            </p>
+        </div>
+
+        <a
+            href="{{ route('businesses.photos', $business) }}"
+            class="text-sm font-medium text-blue-600 hover:text-blue-800"
+        >
+            View All Photos →
+        </a>
+
+    </div>
+
+
+    @if($latestPhotos->count())
+
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+
+            @foreach($latestPhotos as $photo)
+
+                <a
+                    href="{{ $photo->photo_url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+                >
+
+                    <div class="aspect-square overflow-hidden bg-gray-100">
+
+                        <img
+                            src="{{ $photo->photo_url }}"
+                            alt="{{ $business->name }}"
+                            loading="lazy"
+                            class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        >
+
+                    </div>
+
+                    <div class="p-3">
+
+                        <p class="text-sm font-medium text-gray-700">
+                            View Photo
+                        </p>
+
+                    </div>
+
+                </a>
+
+            @endforeach
+
+        </div>
+
+    @else
+
+        <div class="rounded-xl border border-gray-200 bg-white p-8 text-center">
+
+            <h3 class="font-semibold text-gray-800">
+                No Photos Available
+            </h3>
+
+            <p class="mt-2 text-sm text-gray-500">
+                Photos collected from the extractor will appear here.
+            </p>
+
+        </div>
+
+    @endif
+
+</div>
 
     {{-- Google Maps URL --}}
     @if($business->maps_url)
