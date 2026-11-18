@@ -27,7 +27,7 @@
         </p>
     </div>
 
-   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
 
         {{-- Keyword Search --}}
         <div>
@@ -100,6 +100,28 @@
     </select>
 </div>
 
+<div>
+    <label for="fromDate" class="block text-sm font-medium mb-1">
+        From Date
+    </label>
+    <input
+        type="date"
+        id="fromDate"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2"
+    >
+</div>
+
+<div>
+    <label for="toDate" class="block text-sm font-medium mb-1">
+        To Date
+    </label>
+    <input
+        type="date"
+        id="toDate"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2"
+    >
+</div>
+
         {{-- Reset --}}
         <div class="flex items-end">
 
@@ -166,6 +188,9 @@
 
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
                                 Source
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                                Collected Date
                             </th>
 
                             <th class="px-6 py-3 text-right text-xs font-medium uppercase text-gray-500">
@@ -263,6 +288,10 @@
     {{ $business->source->name ?? '—' }}
 </td>
 
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
+    {{ $business->collected_at ? $business->collected_at->format('Y-m-d') : '—' }}
+</td>
+
 
                                 {{-- Action --}}
 <td class="px-6 py-4">
@@ -357,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Action column is the 9th column (index 8)
         columnDefs: [
             {
-                targets: 8,
+                targets: 9,
                 orderable: false,
                 searchable: false
             }
@@ -431,18 +460,72 @@ document.getElementById('ratingFilter').addEventListener('change', function () {
     table.draw();
 });
 
-    // Reset All Filters
-    document.getElementById('resetFilters')
-        .addEventListener('click', function () {
+// Date range filter
+function applyDateFilter() {
+    const fromDate = document.getElementById('fromDate').value;
+    const toDate = document.getElementById('toDate').value;
 
-            keywordSearch.value = '';
-            categoryFilter.value = '';
-            sourceFilter.value = '';
+    table.search.fixed('dateFilter', function (searchStr, rowData) {
+        // Collected Date is column index 8
+        const dateText = String(rowData[8] ?? '')
+            .replace(/<[^>]*>/g, '')
+            .trim();
 
-            table.search('');
-            table.columns().search('');
-            table.draw();
-        });
+        if (!dateText || dateText === '—') {
+            return false;
+        }
+
+        if (fromDate && dateText < fromDate) {
+            return false;
+        }
+
+        if (toDate && dateText > toDate) {
+            return false;
+        }
+
+        return true;
+    });
+
+    table.draw();
+}
+
+document.getElementById('fromDate')
+    .addEventListener('change', applyDateFilter);
+
+document.getElementById('toDate')
+    .addEventListener('change', applyDateFilter);
+
+    
+// Reset All Filters
+document.getElementById('resetFilters')
+    .addEventListener('click', function () {
+
+        // Clear keyword search
+        keywordSearch.value = '';
+
+        // Clear category and source
+        categoryFilter.value = '';
+        sourceFilter.value = '';
+
+        // Clear rating
+        document.getElementById('ratingFilter').value = '';
+
+        // Clear date range
+        document.getElementById('fromDate').value = '';
+        document.getElementById('toDate').value = '';
+
+        // Clear normal DataTable searches
+        table.search('');
+        table.columns().search('');
+
+        // Clear rating and date filters
+        table.search.fixed('ratingFilter', null);
+        table.search.fixed('dateFilter', null);
+
+        // Refresh table
+        table.draw();
+    });
+
 
     // Correct regex escaping
     function escapeRegex(value) {
