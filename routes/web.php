@@ -8,10 +8,12 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\BusinessZipController;
 
+// Route::get('/', function () {
+//     return redirect()->route('sources.index');
+// });
 Route::get('/', function () {
-    return redirect()->route('sources.index');
+    return redirect()->route('businesses.index');
 });
-
 Route::resource('sources', SourceController::class);
 
 Route::get('/businesses', [BusinessController::class, 'index'])

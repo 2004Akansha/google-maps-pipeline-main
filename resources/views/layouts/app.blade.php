@@ -13,10 +13,10 @@
 
     <nav class="bg-white border-b">
         <div class="max-w-7xl mx-auto px-6 py-4">
-            <a href="{{ route('sources.index') }}"
-               class="text-xl font-bold">
-                Google Maps Pipeline
-            </a>
+            <a href="{{ route('businesses.index') }}"
+   class="text-xl font-bold">
+    Google Maps Pipeline
+</a>
         </div>
     </nav>
 
