@@ -713,14 +713,6 @@
 
                     </div>
 
-                    <div class="p-3">
-
-                        <p class="text-sm font-medium text-gray-700">
-                            View Photo
-                        </p>
-
-                    </div>
-
                 </a>
 
             @endforeach
